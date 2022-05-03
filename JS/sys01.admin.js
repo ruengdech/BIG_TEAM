@@ -427,6 +427,7 @@ function prepareDetail(uid, TYPE) {
     MSG = MSG + pre_ + "ประเภทของงาน (3) : " + mid_ + JOB_DATA[row][24] + " <b>" + JOB_DATA[row][27] + "</b>" + post_;
     MSG = MSG + pre2_ + "จำนวนวันทำงาน (ตาม Request): " + mid_ + JOB_DATA[row][52] + post_;
 
+    MSG = MSG + pre2_ + "สถานะ BM อนุมัติ (วันทำงาน <=3): " + mid_ + JOB_DATA[row][75] + post_;
     // ข้อมูลจากทีมช่าง
     MSG = MSG + "<tr><th colspan=\"2\"><b>สถานะของงาน [<u>" + JOB_DATA[row][47] + "</u>]</b> </th></tr>";
     MSG = MSG + pre2_ + "วันที่คาดว่าจะดำเนินการ [ปี-เดือน-วัน] : " + mid_ + JOB_DATA[row][57] + " - " + JOB_DATA[row][58] + post_;
@@ -588,6 +589,14 @@ function prepareDetail(uid, TYPE) {
         $("#head_edit").text("EDIT DATA");
     }
 
+    //BM APPROVE
+    $("#bm_approve").text("สถานะการอนุมัติงานของ BM : " + JOB_DATA[row][75]);
+
+    if (JOB_DATA[row][75] == "WAIT FOR APPROVE") {
+        $("#bt_submit").hide();
+    } else {
+        $("#bt_submit").show();
+    }
 
     // Load EVENT for SEL
     

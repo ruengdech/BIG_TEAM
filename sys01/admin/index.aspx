@@ -290,7 +290,8 @@
                             <div class="ui-block-a" >
                                 <label for="txt_date">วันเวลาที่ต้องการ [เดือน/วัน/ปี]:</label>
                                 <input type="date" name="txt_date" id="txt_date" value="" />
-                                <input type="time" name="txt_time" id="txt_time" />
+                                <input type="time" name="txt_time" id="txt_time" /> 
+                                <span id="bm_approve" style="color:red"></span>
                             </div>
                             <div class="ui-block-b" >
                                 <label for="txt_contract">เลขที่สัญญา :</label>

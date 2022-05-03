@@ -732,16 +732,17 @@
                             ", convert(varchar, plan_start_date,20) as plan_start_date, convert(varchar, plan_finish_date,20) as plan_finish_date, plan_by, convert(varchar, plan_date,23) as plan_date, plan_status, plan_approve_by " &
                             ", convert(varchar, plan_approve_date,23) as plan_approve_date, plan_approve_comment, requst_score, convert(varchar, reques_score_date,23) as reques_score_date , reques_score_comment, customer_score " &
                             ", convert(varchar, customer_score_date,23) as customer_score_date, customer_score_comment, engineer_job_detail " &
+                            ", req_bm_approve " &
                          "FROM SYS01_TS_REQUEST " &
                          "WHERE (req_status ='new') " & conditions &
                          "ORDER BY req_installdate ASC "
-                'Total = 71 Columns
+                'Total = 72 Columns
                 clsSQL.func_SetDataSet(clsSQL.strSql, "REQUEST")
                 If clsSQL.ds.Tables("REQUEST").Rows.Count > 0 Then
                     Dim RESPONSES As String = ""
                     For i As Integer = 0 To clsSQL.ds.Tables("REQUEST").Rows.Count - 1
                         With clsSQL.ds.Tables("REQUEST").Rows(i)
-                            For j = 0 To 70
+                            For j = 0 To 71
                                 'เอาบรรทัดนี้ออกเพราะ Performance ต่ำ (2021-07-20)
                                 'RESPONSES &= .Item(j).ToString.Replace("|", "'").Replace("^", """") & "|" 
                                 Response.Write(.Item(j).ToString.Replace("|", "'").Replace("^", """") & "|")
@@ -749,11 +750,11 @@
                             'เอาบรรทัดนี้ออกเพราะ Performance ต่ำ (2021-07-20)
                             'RESPONSES &= .Item(71).ToString.Replace("|", "'").Replace("^", """") & "^"
                             If i = clsSQL.ds.Tables("REQUEST").Rows.Count - 1 Then
-                                Response.Write(.Item(71).ToString.Replace("|", "'").Replace("^", """"))
+                                Response.Write(.Item(72).ToString.Replace("|", "'").Replace("^", """"))
                             Else
                                 'เอาบรรทัดนี้ออกเพราะ Performance ต่ำ (2021-07-20)
                                 'RESPONSES &= .Item(71).ToString.Replace("|", "'").Replace("^", """") & "^"
-                                Response.Write(.Item(71).ToString.Replace("|", "'").Replace("^", """") & "^")
+                                Response.Write(.Item(72).ToString.Replace("|", "'").Replace("^", """") & "^")
                             End If
                         End With
                     Next
