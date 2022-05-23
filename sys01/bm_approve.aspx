@@ -342,7 +342,9 @@
 </body>
 </html>
 <script src="../JS/sys01.index.js"></script>
-
+<script>
+    goto_detail();
+</script>
 <%--
     USER
     sirikhun

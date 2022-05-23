@@ -347,6 +347,13 @@
                 If clsSQL.func_execute(clsSQL.strSql) Then
                     Response.Write("SUCCESS")
 
+                    Try
+                        clsSQL.strSql = "update SYS01_TS_REQUEST set req_bm_approve = '' where dbo.fn_GetTotalWorkingDays(req_date,req_installdate) > 3"
+                        clsSQL.func_execute(clsSQL.strSql)
+                    Catch ex As Exception
+
+                    End Try
+
                     Dim date2 As Date = Date.Now
                     Dim date1 As Date = Date.Now
                     Dim days As Long = 1
