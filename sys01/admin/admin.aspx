@@ -310,27 +310,6 @@
                                 </div>
                             </div>
 
-                            <-------Hello world To Big-------->
-
-                             <div class="ui-block-a" >
-                                <div class="ui-field-contain">
-                                    <label for="sel_group">สายงานของ :</label>
-                                    <select name="sel_group" id="sel_group" data-native-menu="false">
-                                        <option value="0" selected="selected">เลือกสายงาน</option>
-                                        <option value="00">พี่ตุ๋ย</option>
-                                        <option value="01">พี่ต่าย</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                           <-------Hello world To Big-------->
-
-                            <div class="ui-block-b" >
-                                <div class="ui-field-contain">
-                                    <br /><br />
-                                    <br />
-                                </div>
-                            </div>
 
                             
                             <br /><h2>สถานที่ติดตั้ง</h2>
@@ -408,7 +387,9 @@
                                 <option value="สำรองเครื่อง">สำรองเครื่อง</option>
                                 <option value="ตรวจเช็คระบบ">ตรวจเช็คระบบ</option>
                                 <option value="Preventive Maintainance">Preventive Maintainance</option>
-                                    <option value="อื่นๆ">อื่นๆ</option>
+                                <option value="แจ้งซ่อม">แจ้งซ่อม</option>
+                                <option value="อื่นๆ">อื่นๆ</option>
+                                    
                                 </select>
                             </div>
                             <div class="ui-block-b" >
@@ -426,7 +407,9 @@
                                     <option value="สำรองเครื่อง">สำรองเครื่อง</option>
                                     <option value="ตรวจเช็คระบบ">ตรวจเช็คระบบ</option>
                                     <option value="Preventive Maintainance">Preventive Maintainance</option>
+                                    <option value="แจ้งซ่อม">แจ้งซ่อม</option>
                                     <option value="อื่นๆ">อื่นๆ</option>
+                                    
                                 </select>
                             </div>
                             <div class="ui-block-b">
@@ -444,7 +427,9 @@
                                     <option value="สำรองเครื่อง">สำรองเครื่อง</option>
                                     <option value="ตรวจเช็คระบบ">ตรวจเช็คระบบ</option>
                                     <option value="Preventive Maintainance">Preventive Maintainance</option>
+                                    <option value="แจ้งซ่อม">แจ้งซ่อม</option>
                                     <option value="อื่นๆ">อื่นๆ</option>
+                                    
                                 </select>
                             </div>
                             <div class="ui-block-b">
@@ -494,36 +479,13 @@
                                     <option value="0" selected="selected">เลือกช่างคนที่ 4</option>
                                 </select>
                             </div>
-
-                            <-------Hello world To Big-------->
-
-                            <div class="ui-block-a">
-                                <label for="txt_job_status">สถานะของงาน</label>
-                                <select name="txt_job_status" id="txt_job_status" data-native-menu="false">
-                                    <option value="0" selected="selected"> เลือกสถานะของงาน </option>
-                                    <option value="new">new</option>
-                                    <option value="start">start</option>
-                                    <option value="plan">plan</option>
-                                    <option value="assigned">assigned</option>
-                                </select>
-                            </div>
-
-                            <-------Hello world To Big-------->
                             
                          </div><!-- <div class="ui-grid-a ui-responsive"> -->
-                         <div class="ui-grid-a ui-responsive background1" style="margin-top:16px;">
 
-                            <div class="ui-block-a" style="margin-top:16px; text-align:center;">
-                                <input type="checkbox" style="text-align:center;" id="req_isfinish" name="req_isfinish" value="EndTask"/>
-                                <label for="req_isfinish" style="text-align:center;/* width:160px;*/"> จบงานที่หน้างาน </label>
+                         <div class="ui-block-a">
+                                <label for="txt_job_status">สถานะของงาน</label>
+                                <input type="text" name="txt_job_status" id="txt_job_status" readonly="readonly" />
                             </div>
-
-                             <div class="ui-block-b">
-                                <label for="txt_remark">หมายเหตุ</label>
-                                <input type="text" name="txt_remark" id="txt_remark"/>
-                             </div>
-                         </div>
-
                         <div class="ui-grid-solo ui-responsive background2">
                             <div class="ui-block-a">
                                 <label for="txt_assignid">พนักงานผู้มอบหมายงาน</label>
@@ -594,15 +556,29 @@
                                 <label for="p_job_state_engineer">สถานะงานจากช่าง</label>
                                 <div id="p_job_state_engineer"></div>
                             </div>
+                        </div>
+                        
+                        <div class="ui-grid-a ui-responsive background1" style="margin-top:16px;">
 
-                        </div><!--<div class="ui-grid-a ui-responsive">-->
-                        <span style="display: block ruby;">
+                            <div class="ui-block-a" style="margin-top:16px; text-align:center;">
+                                <input type="checkbox" style="text-align:center;" id="req_isfinish" name="req_isfinish" value="true"/>
+                                <label for="req_isfinish" style="text-align:center;/* width:160px;*/"> จบงานที่หน้างาน </label>
+                            </div>
+
+                             <div class="ui-block-b">
+                                <label for="txt_remark">หมายเหตุ</label>
+                                <input type="text" name="txt_remark" id="txt_remark"/>
+                             </div>
+                         </div>
+                        
+                        
+                        <div class="ui-grid-a ui-responsive">
+                        <span>
                         <button class="ui-btn btn-color" id ="bt_submit" style="background-color:lightgreen; margin-bottom:18px; width: 50%;">บันทึกข้อมูล</button>
                         <button class="ui-btn ui-btn-active ui-btn-c btn-colorback" style="width: 50%;" id ="bt_delete">ลบข้อมูล</button>
-                        <button class="ui-btn btn-color" id ="bt_test" style="background-color:lightgreen; margin-bottom:18px; width: 50%;">Test</button>
                         </span>
-                    </div><%--<div class="ui-body ui-body-a">--%>
-                </div><%--<div id="request" class="ui-body-d ui-content ui-corner-all">--%>
+                    </div><div class="ui-body ui-body-a">
+                </div><div id="request" class="ui-body-d ui-content ui-corner-all">
             
             <input style="background-color:goldenrod" type="button" onclick="history.back();" value="Back"/>
  		</div>

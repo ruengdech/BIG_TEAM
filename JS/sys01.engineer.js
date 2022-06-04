@@ -61,6 +61,9 @@ var ctrl_txt_modname = $("#txt_modname");
 
 var ctrl_bt_submit = $("#bt_submit");
 var ctrl_bt_submit_e = $("#bt_submit_e");
+
+var ctrl_req_isfinish = $("#req_isfinish");
+var ctrl_txt_remark = $("txt_remark");
 /*</Control variable> */
 
 
@@ -341,7 +344,9 @@ function f_save_data(isFinish) {
                 , ctrl_file_4: ctrl_file_4.val()
                 , ctrl_txt_job_detail: ctrl_txt_job_detail.val().replace("'", "|").replace('"', '^')
                 , ctrl_sel_job_status: ctrl_sel_job_status.val()
-                , is_finished : isFinish
+                , is_finished: isFinish
+                , ctrl_req_isfinish: ctrl_req_isfinish.val()
+                , ctrl_txt_remark: ctrl_txt_remark.val()
             }).done(function (data) {
                 if (data.indexOf("SUCCESS") !== -1) {
                     confirm("บันทึกข้อมูลสำเร็จ");

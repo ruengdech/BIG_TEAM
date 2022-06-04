@@ -16,7 +16,6 @@
                 Dim URL As String = "https://saintmed.dyndns.biz/net/sys04/csi.aspx?r1=" & UUID & "&r2=" & UUID
                 Dim SMS As New SMS_NEW()
                 Dim MSG_SMS As String = "ขอบพระคุณที่ใช้บริการทีมงาน Technical บริษัท SAINTMED " & vbNewLine & vbNewLine & "เพื่อพัฒนาบริการให้ท่านดียิ่งๆขึ้น ขอความกรุณาให้ข้อมูลความพึงพอใจ คลิก " & vbNewLine & URL
-                'ทดสอบให้วิ่งไปที่พี่ตุ๋ย
                 Dim res As String = SMS.SEND_SMS(CONTACT_MOB, MSG_SMS)
                 Return res
             End With
@@ -306,6 +305,10 @@
                 If req_bm.ToString.Length > 3 Then
                     req_bm_approve = "WAIT FOR APPROVE"
                 End If
+                Dim job_type As String = "00"
+                If ctrl_sel_job1.ToString = "แจ้งซ่อม" Then
+                    job_type = "01"
+                End If
 
 
                 clsSQL.strSql = "SELECT STAFF_NAME, STAFF_LNAME, STAFF_EMAIL FROM SYS01_MS_STAFF WHERE (STAFF_ID = " & ctrl_sel_am & ")"
@@ -331,7 +334,7 @@
                                 ", req_installmobile, req_installdate, req_installtime " &
                                 ", req_contact, req_pmround, req_warantee" &
                                 ", req_jobtype1, req_jobtype2, req_jobtype3" &
-                                ", req_job1, req_job2, req_job3, req_bm_approve)  " &
+                                ", req_job1, req_job2, req_job3, req_bm_approve, req_group)  " &
                             "VALUES ( " &
                                 "GETDATE(), " & ctrl_txt_staffId & ", '" & ctrl_txt_name & "'" &
                                 ", '" & ctrl_txt_lname & "', '" & ctrl_txt_mobile & "', '" & ctrl_txt_email & "'" &
@@ -343,6 +346,7 @@
                                 ", '" & ctrl_sel_job1 & "', '" & ctrl_sel_job2 & "', '" & ctrl_sel_job3 & "'" &
                                 ", '" & ctrl_txt_job1 & "', '" & ctrl_txt_job2 & "', '" & ctrl_txt_job3 & "'" &
                                 ", '" & req_bm_approve & "' " &
+                                ", '" & job_type & "' " &
                                 ")"
                 If clsSQL.func_execute(clsSQL.strSql) Then
                     Response.Write("SUCCESS")
@@ -1091,6 +1095,9 @@
                 Dim ctrl_txt_job3 As String = Request.Form("ctrl_txt_job3")
                 Dim ctrl_txt_job_status As String = Request.Form("ctrl_txt_job_status")
 
+                Dim ctrl_txt_remark As String = Request.Form("ctrl_txt_remark")
+                Dim ctrl_req_isfinish As String = Request.Form("ctrl_req_isfinish")
+
 
                 Dim ctrl_sel_staff As String = Request.Form("ctrl_sel_staff")
                 Dim ctrl_sel_staff1 As String = Request.Form("ctrl_sel_staff1")
@@ -1117,6 +1124,12 @@
 
                 Dim am_name, am_email, bm_name, bm_email, staff_name1, staff_name2, staff_name3, staff_name4, staff_mail1, staff_mail2, staff_mail3, staff_mail4 As String
 
+
+                Dim job_type As String = "00"
+                If ctrl_sel_job1.ToString = "แจ้งซ่อม" Then
+                    job_type = "01"
+                End If
+
                 '<GET AM>
                 clsSQL.strSql = "SELECT STAFF_NAME, STAFF_LNAME, STAFF_EMAIL FROM SYS01_MS_STAFF WHERE (STAFF_ID = " & ctrl_sel_am & ")"
                 clsSQL.func_SetDataSet(clsSQL.strSql, "AM")
@@ -1131,7 +1144,6 @@
                     bm_name = clsSQL.ds.Tables("BM").Rows(0).Item("STAFF_NAME").ToString & " " & clsSQL.ds.Tables("BM").Rows(0).Item("STAFF_LNAME").ToString
                     bm_email = clsSQL.ds.Tables("BM").Rows(0).Item("STAFF_EMAIL").ToString
                 End If
-
                 '<GET ENGINEER>
                 If ctrl_sel_staff1.Length < 3 Then ctrl_sel_staff1 = "0"
                 If ctrl_sel_staff2.Length < 3 Then ctrl_sel_staff2 = "0"
@@ -1214,6 +1226,16 @@
                 Else
                     SQL_EDITS &= " , req_mname = '" & ctrl_txt_plan_approvename & "' "
                 End If
+
+                If ctrl_req_isfinish.Length >= 4 Then
+                    SQL_EDITS &= " , req_isfinish = '" & ctrl_req_isfinish & "' "
+                End If
+
+                If ctrl_txt_remark.Length > 4 Then
+                    SQL_EDITS &= " , txt_remark = '" & ctrl_txt_remark & "' "
+                End If
+
+
                 '</MARK STATUS AND MODIFY NAME>
 
                 clsSQL.strSql = "UPDATE SYS01_TS_REQUEST SET req_amid = 00, req_amname = '00', req_amemail = '00', req_bmid = 00, req_bmname = '00', req_bmemail = '00', req_installlocation = '00', req_installdept = '00', req_installcontact = '00', req_installmobile = '00', req_installdate = 00, req_installtime = '00', req_contact = '00', req_pmround = 00, req_warantee = 00, req_jobtype1 = '00', req_jobtype2 = '00', req_jobtype3 = '00', req_job1 = '00', req_job2 = '00', req_job3 = '00', req_assignid = 00, req_assignname = '00', req_assigndate = 00, req_numberofstaff = 00, req_staffid1 = 00, req_staffid2 = 00, req_staffid3 = 00, req_staffid4 = 00, req_staffname1 = '00', req_staffname2 = '00', req_staffname3 = '00', req_staffname4 = '00', req_staffemail1 = '00', req_staffemail2 = '00', req_staffemail3 = '00', req_staffemail4 = '00', req_mwhen = GETDATE(), req_mname = '00' WHERE (uid = 111)"
@@ -1240,8 +1262,9 @@
                                     " , req_job2 = '" & ctrl_txt_job2 & "'" &
                                     " , req_job3 = '" & ctrl_txt_job3 & "'" &
                                     " , req_mwhen = GETDATE() " &
-                                    SQL_EDITS & " " &
-                                " WHERE (uid = " & job_id & ")"
+                                    " , req_group = '" & job_type & "' " &
+                SQL_EDITS & " " &
+                        " WHERE (uid = " & job_id & ")"
                 If clsSQL.func_execute(clsSQL.strSql) Then
                     Response.Write("SUCCESS")
 
@@ -1405,6 +1428,9 @@
 
                 Dim isFINISHED As String = Request.Form("is_finished")
 
+                Dim ctrl_req_isfinish As String = Request.Form("ctrl_req_isfinish")
+                Dim ctrl_txt_remark As String = Request.Form("ctrl_txt_remark")
+
 
                 '<UPDATE SQL>
                 Dim SQL_EDITS As String = ""
@@ -1422,6 +1448,14 @@
                 End If
                 If ctrl_sel_job_status.Length > 4 Then
                     SQL_EDITS &= " , engineer_job_reason = '" & ctrl_sel_job_status & "' "
+                End If
+
+                If ctrl_req_isfinish.Length >= 4 Then
+                    SQL_EDITS &= " , req_isfinish = '" & ctrl_req_isfinish & "' "
+                End If
+
+                If ctrl_txt_remark.Length > 4 Then
+                    SQL_EDITS &= " , txt_remark = '" & ctrl_txt_remark & "' "
                 End If
 
                 clsSQL.strSql = "UPDATE SYS01_TS_REQUEST SET req_amid = 00, req_amname = '00', req_amemail = '00', req_bmid = 00, req_bmname = '00', req_bmemail = '00', req_installlocation = '00', req_installdept = '00', req_installcontact = '00', req_installmobile = '00', req_installdate = 00, req_installtime = '00', req_contact = '00', req_pmround = 00, req_warantee = 00, req_jobtype1 = '00', req_jobtype2 = '00', req_jobtype3 = '00', req_job1 = '00', req_job2 = '00', req_job3 = '00', req_assignid = 00, req_assignname = '00', req_assigndate = 00, req_numberofstaff = 00, req_staffid1 = 00, req_staffid2 = 00, req_staffid3 = 00, req_staffid4 = 00, req_staffname1 = '00', req_staffname2 = '00', req_staffname3 = '00', req_staffname4 = '00', req_staffemail1 = '00', req_staffemail2 = '00', req_staffemail3 = '00', req_staffemail4 = '00', req_mwhen = GETDATE(), req_mname = '00' WHERE (uid = 111)"
@@ -1509,7 +1543,6 @@
                             'Dim URL As String = "https://saintmed.dyndns.biz/net/sys03/csi.aspx?r1=" & job_id & "&r2=" & job_id
                             'Dim SMS As New SMS_NEW()
                             'Dim MSG_SMS As String = "ขอบพระคุณที่ใช้บริการทีมงาน Technical บริษัท Saint Medical " & vbNewLine & vbNewLine & "เพื่อพัฒนาบริการให้ท่านดียิ่งๆขึ้น ขอความกรุณาให้ข้อมูลความพึงพอใจ คลิก " & vbNewLine & URL
-                            ''ทดสอบให้วิ่งไปที่พี่ตุ๋ย
                             'SMS.SEND_SMS(CONTACT_MOB, MSG_SMS)
                             ''</2021-08-07 CSI FORM New Project>
                             SEND_CSI_FORM(job_id)

@@ -496,6 +496,21 @@
                                 <div id="p_job_state_engineer"></div>
                             </div>
                         </div><!--<div class="ui-grid-a ui-responsive">-->
+
+                       <div class="ui-grid-a ui-responsive background1" style="margin-top:16px;">
+
+                            <div class="ui-block-a" style="margin-top:16px; text-align:center;">
+                                <input type="checkbox" style="text-align:center;" id="req_isfinish" name="req_isfinish" value="true"/>
+                                <label for="req_isfinish" style="text-align:center;/* width:160px;*/"> จบงานที่หน้างาน </label>
+                            </div>
+
+                             <div class="ui-block-b">
+                                <label for="txt_remark">หมายเหตุ</label>
+                                <input type="text" name="txt_remark" id="txt_remark"/>
+                             </div>
+                         </div>
+
+
                         <button class="ui-btn" id ="bt_submit">บันทึกข้อมูล</button>
                         <button class="ui-btn ui-btn-active ui-btn-c" id ="bt_delete">ลบข้อมูล</button>
                     </div><%--<div class="ui-body ui-body-a">--%>

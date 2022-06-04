@@ -10,6 +10,10 @@ var ctrl_txt_mobile = $("#txt_mobile");
 var ctrl_txt_email = $("#txt_email");
 var ctrl_sel_am = $("#sel_am");
 var ctrl_sel_bm = $("#sel_bm");
+//addition
+var ctrl_req_isfinish = $("#req_isfinish");
+var ctrl_txt_remark = $("#txt_remark");
+
 var ctrl_txt_location = $("#txt_location");
 var ctrl_txt_dept = $("#txt_dept");
 var ctrl_txt_contact = $("#txt_contact");
@@ -139,8 +143,8 @@ $(document).ready(function () {
         ctrl_sel_staff4.selectmenu('refresh', true);
     });
 
-    try {  ctrl_sel_am.selectmenu().selectmenu('refresh', true);} catch (err) { }
-    try { ctrl_sel_bm.selectmenu().selectmenu('refresh', true);} catch (err) { }
+    try { ctrl_sel_am.selectmenu().selectmenu('refresh', true);} catch (err) { }
+    try { ctrl_sel_bm.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_staff1.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_staff2.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_staff3.selectmenu().selectmenu('refresh', true); } catch (err) { }
@@ -229,6 +233,8 @@ ctrl_bt_submit.click(function () {
             , ctrl_txt_email: ctrl_txt_email.val().replace("'", "|").replace('"', '^')
             , ctrl_sel_am: ctrl_sel_am.val()
             , ctrl_sel_bm: ctrl_sel_bm.val()
+            , ctrl_req_isfinish: ctrl_req_isfinish.val()
+            , ctrl_txt_remark: ctrl_txt_remark.val()
             , ctrl_txt_location: ctrl_txt_location.val().replace("'", "|").replace('"', '^')
             , ctrl_txt_dept: ctrl_txt_dept.val()
             , ctrl_txt_contact: ctrl_txt_contact.val().replace("'", "|").replace('"', '^')

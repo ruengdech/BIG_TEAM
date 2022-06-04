@@ -245,6 +245,7 @@
                                     <option value="สำรองเครื่อง">สำรองเครื่อง</option>
                                     <option value="ตรวจเช็คระบบ">ตรวจเช็คระบบ</option>
                                     <option value="Preventive Maintainance">Preventive Maintainance</option>
+                                    <option value="แจ้งซ่อม">แจ้งซ่อม</option>
                                     <option value="อื่นๆ">อื่นๆ</option>
                                 </select>
                             </div>
@@ -263,6 +264,7 @@
                                     <option value="สำรองเครื่อง">สำรองเครื่อง</option>
                                     <option value="ตรวจเช็คระบบ">ตรวจเช็คระบบ</option>
                                     <option value="Preventive Maintainance">Preventive Maintainance</option>
+                                    <option value="แจ้งซ่อม">แจ้งซ่อม</option>
                                     <option value="อื่นๆ">อื่นๆ</option>
                                 </select>
                             </div>
@@ -281,6 +283,7 @@
                                     <option value="สำรองเครื่อง">สำรองเครื่อง</option>
                                     <option value="ตรวจเช็คระบบ">ตรวจเช็คระบบ</option>
                                     <option value="Preventive Maintainance">Preventive Maintainance</option>
+                                    <option value="แจ้งซ่อม">แจ้งซ่อม</option>
                                     <option value="อื่นๆ">อื่นๆ</option>
                                 </select>
                             </div>
