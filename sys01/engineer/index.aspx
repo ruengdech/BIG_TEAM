@@ -461,6 +461,19 @@
                             </div>
                         </div><!--<div class="ui-grid-a ui-responsive">-->
 						
+                        <div class="ui-grid-a ui-responsive background1" style="margin-top:16px;">
+
+
+                            <div class="ui-block-a" style="margin-top:16px; text-align:center;">
+                                <input type="checkbox" style="text-align:center;" id="req_isfinish" name="req_isfinish" value="true"/>
+                                <label for="req_isfinish" style="text-align:center;/* width:160px;*/"> จบงานที่หน้างาน </label>
+                            </div>
+
+                             <div class="ui-block-b">
+                                <label for="txt_remark">หมายเหตุ</label>
+                                <input type="text" name="txt_remark" id="txt_remark"/>
+                             </div>
+                         </div>
 						
                         <div class="ui-grid-a ui-responsive" id="div_button" data-theme="c">
                             <div class="ui-block-a">
