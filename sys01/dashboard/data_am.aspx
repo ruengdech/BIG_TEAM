@@ -48,6 +48,7 @@
     }
 
 </style>
+
 <script type="text/javascript" >
     var JOB_DATA = [];
     var AM_LIST = [];
@@ -55,21 +56,17 @@
 </script>
 <%
     Dim cls As New MY_CLASS_MSSQL()
-
     'Search Form Query
     Dim query_am_list As String
     Dim query_staff_list As String
 
     'Recieve Form Value
     Dim input_am_id, input_year, input_staff_id, input_am_name As String
-    input_am_id = Request.Form("req_am_id")
+    input_am_id = Request.QueryString("req_am_id")
     input_staff_id = Request.Form("req_staff_id")
-    input_year = Request.Form("req_year")
 
     'input_am_name = Request.Form("req_am_name")
     input_am_name = Request.QueryString("req_am_name")
-
-
 
     'AM List
     query_am_list = "SELECT STAFF_ID , STAFF_NAME, STAFF_LNAME FROM  SYS01_MS_STAFF WHERE  (STAFF_TYPE LIKE '%AREAMANAGER%') ORDER BY STAFF_ID"
@@ -172,7 +169,9 @@
     
     <!-- AM Name Repeater List-->
     <br /><br /><br />
-    <h3>Saintmed: ระบบงานติดตั้ง (AM)</h3>          
+    <h3>Saintmed: ระบบงานติดตั้ง (AM)</h3>   
+    <!-- Print ค่าที่รับมาจาก Dashboard -->
+    <p> <%  'Response.Write(input_am_name) %></p>
     <hr></hr>
 
     <!--Show Search --> 
@@ -181,7 +180,7 @@
             <div class="row"> 
                  <div class="col">
                    <h6>AM Name :</h6>
-                    <select class="form-control" id="req_am_id" name="req_am_id" placeholder="เลือก AM "> 
+                    <select class="form-control" id="req_am_id" name="req_am_id_form" placeholder="เลือก AM "> 
                     <option value=""> </option>
                 <%
                     Dim cls As New MY_CLASS_MSSQL()
@@ -189,6 +188,7 @@
                     query_am_list = "SELECT STAFF_ID , STAFF_NAME, STAFF_LNAME FROM  SYS01_MS_STAFF WHERE  (STAFF_TYPE LIKE '%AREAMANAGER%') ORDER BY  STAFF_ID"
                     cls.strSql = query_am_list
                     cls.func_SetDataSet(cls.strSql, "AMList")
+
                     If cls.ds.Tables("AMList").Rows.Count > 0 Then
                         Dim VALUE As String = ""
                         For i As Integer = 0 To cls.ds.Tables("AMList").Rows.Count - 1
@@ -205,7 +205,7 @@
 
                 <div class="col" style="color:#FFFCF5;">
                    <h6 style="color:#FFFCF5;">Sales Name</h6>
-                    <select class="form-control" id="req_staff_id" name="req_staff_id" placeholder="เลือก Sales Staff " style="color:#FFFCF5;"> 
+                    <select class="form-control" id="req_staff_id" name="req_staff_id_form" placeholder="เลือก Sales Staff " style="color:#FFFCF5;"> 
                     <option value="" style="color:#FFFCF5;"></option>
                 <%
                     'Dim cls2 As New MY_CLASS_MSSQL()
@@ -224,7 +224,7 @@
 
                 <div class="col">
                    <h6>Request Year:</h6>
-                    <select class="form-control" id="req_year" name="req_year" placeholder="เลือก ปี "> 
+                    <select class="form-control" id="req_year" name="req_year_form" placeholder="เลือก ปี "> 
                     <option value="">  </option>
                     <option value="2021"> 2021 </option>
                     <option value="2022"> 2022 </option>
@@ -247,66 +247,98 @@
     
  <%
      Try
-         'Recieve Form Value
-         Dim input_am_id, input_year, input_am_name As String
-         input_am_id = Request.Form("req_am_id")
-         input_year = Request.Form("req_year")
+         '*** Read Session ***'
+         Dim Ses_req_group, Ses_req_year, Ses_first_AMlist As String
+         Ses_req_group = Session("Group")
+         Ses_req_year = Session("Year")
+         'Show value recive from session
+         'Response.Write("Group = " & Session("Group") & "<br>")
+         'Response.Write("Year = " & Session("Year") & "<br><br>")
 
-         input_am_name = Request.Form("req_am_name")
-         If (input_am_name = "") = False Then
-             Dim query_am_id As String
-             input_am_name = Request.QueryString("req_am_name")
+         'Recieve Form Value and Session
+         Dim input_am_id, input_year As String
+         input_am_id = Request.QueryString("req_am_id")
 
-             query_am_id = "SELECT req_amid FROM SYS01_TS_REQUEST where req_amname LIKE '" + input_am_name + "' GROUP BY req_amid"
-             cls.strSql = query_am_id
-             cls.func_SetDataSet(cls.strSql, "AM_ID")
-
-             If cls.ds.Tables("AM_ID").Rows.Count > 0 Then
-                 Dim VALUE As String = ""
-                 For i As Integer = 0 To cls.ds.Tables("AM_ID").Rows.Count - 1
-                     With cls.ds.Tables("AM_ID").Rows(i)
-                         input_am_id = .Item("req_amid").ToString
-                     End With
-                 Next
-                 Response.Write(Left(VALUE, VALUE.Length - 1))
-             End If
+         '**Cut string**'
+         Dim am_id As String
+         If input_am_id <> "" Then
+             Dim arr_am_id() As String
+             arr_am_id = input_am_id.Split("|")
+             am_id = arr_am_id(1)
+             'MsgBox(">>" + am_id)
+             'For count = 0 To arr_am_id.Length - 1
+             'MsgBox(arr_am_id(count))
+             'Next
          End If
 
-         If (input_am_id = "") = False Or (input_year = "") = False Then
-             'Searh by Recieve value
-             If (input_am_id = "") = False And (input_year = "") = False Then
-                 'search by AM ID and Year
+
+         '** If have the value from first page and have sestion (group) and (years) **'
+         If am_id <> "" Then
+             'search by AM ID and Session Group and Sesstion Year
+             'MsgBox("Keep In Session 1 >>" + am_id + " | " + Ses_req_year + " | " + Ses_req_group)
+             Dim query_job_data As String
+             query_job_data = "SELECT uid, staff_name, req_installlocation, req_installdate, req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status FROM SYS01_TS_REQUEST WHERE req_amid = " + am_id + "and year(req_installdate) = " + Ses_req_year + "and  req_group = " + Ses_req_group
+             cls.strSql = query_job_data
+             cls.func_SetDataSet(cls.strSql, "JobAMRequest")
+
+             '*** Create Session ***'
+             Session.Timeout = 20
+             Session("FirstAM_ID") = am_id
+             am_id = ""
+             Response.Redirect("../dashboard/data_am.aspx")
+         ElseIf am_id = "" Then
+             'MsgBox("Condition 2 ")
+             '*** Read Session ***'
+             Ses_req_group = Session("Group")
+             Ses_req_year = Session("Year")
+             Ses_first_AMlist = Session("FirstAM_ID")
+
+             input_am_id = Request.Form("req_am_id_form")
+             input_year = Request.Form("req_year_form")
+
+             If Ses_first_AMlist <> "" Then
+                 'search by AM ID and Session Group and Sesstion Year
+                 'MsgBox("Condition 5 >>" + Ses_first_AMlist + " | " + Ses_req_year + " | " + Ses_req_group)
                  Dim query_job_data As String
-                 query_job_data = "SELECT uid, staff_name, req_installlocation, req_date, req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status From SYS01_TS_REQUEST WHERE year(req_date) = " + input_year + "and req_amid = " + input_am_id
+                 query_job_data = "SELECT uid, staff_name, req_installlocation, req_installdate, req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status FROM SYS01_TS_REQUEST WHERE req_amid = " + Ses_first_AMlist + "and year(req_installdate) = " + Ses_req_year + "and  req_group = " + Ses_req_group + "and req_status != 'INACTIVE'"
                  cls.strSql = query_job_data
                  cls.func_SetDataSet(cls.strSql, "JobAMRequest")
+                 Session("FirstAM_ID") = ""
 
-             ElseIf (input_am_id = "") = False And input_year = "" Then
-                 'search by AM ID only
-                 Dim query_job_data As String
-                 query_job_data = "SELECT uid, staff_name, req_installlocation, req_date, req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status FROM SYS01_TS_REQUEST WHERE req_amid = " + input_am_id
-                 cls.strSql = query_job_data
-                 cls.func_SetDataSet(cls.strSql, "JobAMRequest")
+             ElseIf input_am_id <> "" Or input_year <> "" Then
+                 'MsgBox("Condition 6 >>" + input_am_id + " | " + input_year)
 
-             ElseIf (input_year = "") = False And input_am_id = "" Then
-                 'search by Year only
-                 Dim query_job_data As String
-                 query_job_data = "SELECT uid, staff_name, req_installlocation, req_date, req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status From SYS01_TS_REQUEST WHERE year(req_date) = " + input_year
-                 cls.strSql = query_job_data
-                 cls.func_SetDataSet(cls.strSql, "JobAMRequest")
-             Else
-                 'search by All
-                 Dim query_job_data As String
-                 query_job_data = "SELECT uid, staff_name, req_installlocation, req_date, req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status FROM SYS01_TS_REQUEST"
-                 cls.strSql = query_job_data
-                 cls.func_SetDataSet(cls.strSql, "JobAMRequest")
-             End If
+                 'Searh by Recieve value
+                 If input_am_id <> "" And input_year <> "" Then
+                     'search by AM ID and Year and Session Group
+                     'MsgBox("Condition 2.1.1 - Search by AM ID and Year>>" + input_am_id + " | " + input_year + " | " + Ses_req_group)
+                     Dim query_job_data As String
+                     query_job_data = "SELECT uid, staff_name, req_installlocation, req_installdate , req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status From SYS01_TS_REQUEST WHERE year(req_installdate) = " + input_year + "and req_amid = " + input_am_id + "and  req_group = " + Ses_req_group + "and req_status != 'INACTIVE'"
+                     cls.strSql = query_job_data
+                     cls.func_SetDataSet(cls.strSql, "JobAMRequest")
+
+                 ElseIf input_am_id <> "" And input_year = "" Then
+                     'search by AM ID only and Session Group
+                     'MsgBox("Condition 2.1.2 - Search by AM ID only >>" + input_am_id + " | " + Ses_req_group)
+                     Dim query_job_data As String
+                     query_job_data = "SELECT uid, staff_name, req_installlocation, req_installdate, req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status FROM SYS01_TS_REQUEST WHERE req_amid = " + input_am_id + "and  req_group = " + Ses_req_group + "and req_status != 'INACTIVE'"
+                     cls.strSql = query_job_data
+                     cls.func_SetDataSet(cls.strSql, "JobAMRequest")
+
+                 ElseIf input_year <> "" And input_am_id = "" Then
+                     'search by Year only and Session Group
+                     'MsgBox("Condition 2.1.3- Search Year only >>" + input_year + " | " + Ses_req_group)
+                     Dim query_job_data As String
+                     query_job_data = "SELECT uid, staff_name, req_installlocation, req_installdate , req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status From SYS01_TS_REQUEST WHERE year(req_installdate) = " + input_year + "and  req_group = " + Ses_req_group + "and req_status != 'INACTIVE'"
+                     cls.strSql = query_job_data
+                     cls.func_SetDataSet(cls.strSql, "JobAMRequest")
+                 End If
 
 
-             If cls.ds.Tables("JobAMRequest").Rows.Count > 0 Then
-                 Dim VALUE As String = ""
-                 For i As Integer = 0 To cls.ds.Tables("JobAMRequest").Rows.Count - 1
-                     With cls.ds.Tables("JobAMRequest").Rows(i)
+                 If cls.ds.Tables("JobAMRequest").Rows.Count > 0 Then
+                     Dim VALUE As String = ""
+                     For i As Integer = 0 To cls.ds.Tables("JobAMRequest").Rows.Count - 1
+                         With cls.ds.Tables("JobAMRequest").Rows(i)
 %>
                     <script>
                         //Keep data to Array Job_Data
@@ -323,17 +355,24 @@
                             "<% response.Write(.Item(9).ToString) %>"]);
                     </script>
 <%                         
-                'VALUE &= i.ToString() &
-                '.Item("uid").ToString & "|" & .Item("staff_name").ToString & "|" &
-                '.Item("req_installlocation").ToString & "|" & .Item("req_date").ToString & "|" &
-                '.Item("req_jobtype1").ToString & "|" & .Item("req_job1").ToString & "|" &
-                '.Item("req_staffname1").ToString & "|" & .Item("req_jobdatefinish").ToString & "|" &
-                '.Item("req_status").ToString & "^"
-            End With
-        Next
-        'Response.Write(Left(VALUE, VALUE.Length - 1))
+                    'VALUE &= i.ToString() &
+                    '.Item("uid").ToString & "|" & .Item("staff_name").ToString & "|" &
+                    '.Item("req_installlocation").ToString & "|" & .Item("req_installdate").ToString & "|" &
+                    '.Item("req_jobtype1").ToString & "|" & .Item("req_job1").ToString & "|" &
+                    '.Item("req_staffname1").ToString & "|" & .Item("req_jobdatefinish").ToString & "|" &
+                    '.Item("req_status").ToString & "^"
+                End With
+            Next
+            'Response.Write(Left(VALUE, VALUE.Length - 1))
+        End If
+    Else
+        'search by All and Session Group
+        'MsgBox("Condition Search ALL >>" + Ses_req_group)
+        Dim query_job_data As String
+        query_job_data = "SELECT uid, staff_name, req_installlocation, req_installdate , req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status FROM SYS01_TS_REQUEST WHERE req_group = " + Ses_req_group + "and req_status != 'INACTIVE'"
+        cls.strSql = query_job_data
+        cls.func_SetDataSet(cls.strSql, "JobAMRequest")
     End If
-
  %>      
         <!--Show data table -->
          <h2 style=" padding-top:16px; padding-left:30px; padding-right:30px;">ข้อมูลงานที่ขอรับบริการ</h2>
@@ -346,7 +385,7 @@
                 <th style="background-color:dodgerblue;">JOB_ID</th>
                 <th style="background-color:dodgerblue;">SALE NAME</th>
                 <th style="background-color:dodgerblue;">Location</th>
-                <th style="background-color:dodgerblue;">Req Date</th>
+                <th style="background-color:dodgerblue;">Installation Date</th>
                 <th style="background-color:dodgerblue;">Type</th>
                 <th style="background-color:dodgerblue;">Topic</th>
                 <th style="background-color:dodgerblue;">AM Name</th>
@@ -368,65 +407,7 @@
                                    "<td>" & .Item("uid").ToString & "</td>" &
                                    "<td>" & .Item("staff_name").ToString & "</td>" &
                                    "<td>" & .Item("req_installlocation").ToString & "</td>" &
-                                   "<td>" & .Item("req_date").ToString & "</td>" &
-                                   "<td>" & .Item("req_jobtype1").ToString & "</td>" &
-                                   "<td>" & .Item("req_job1").ToString & "</td>" &
-                                   "<td>" & .Item("req_amname").ToString & "</td>" &
-                                   "<td>" & .Item("req_staffname1").ToString & "</td>" &
-                                   "<td>" & .Item("req_jobdatefinish").ToString & "</td>" &
-                                   "<td>" & .Item("req_status").ToString & "</td>" &
-                                   "</tr>"
-
-                             End With
-                         Next
-                         Response.Write(Left(VALUE, VALUE.Length - 1))
-                  %>                   
-               </tbody>
-           </table>
-        </div> <!-- End class table resp -->
-<%
-        End If
-    Else
-        'search all } search blank
-        Dim query_job_data As String
-        query_job_data = "SELECT uid, staff_name, req_installlocation, req_date, req_jobtype1, req_job1, req_amname, req_staffname1, req_jobdatefinish , req_status FROM SYS01_TS_REQUEST"
-        cls.strSql = query_job_data
-        cls.func_SetDataSet(cls.strSql, "JobAMRequest")
-            %>      
-        <!--Show data table -->
-         <h2 style=" padding-top:16px; padding-left:30px; padding-right:30px;">ข้อมูลงานที่ขอรับบริการ</h2>
-         <!-- Data Table -->
-         <div class="table-responsive ">
-            <table class="table table-hover table-striped table-bordered mydatatable" id="mydatatable" style="text-align:center">
-              <thead>
-                <tr>
-                <th style="background-color:dodgerblue;">No.</th>
-                <th style="background-color:dodgerblue;">JOB_ID</th>
-                <th style="background-color:dodgerblue;">SALE NAME</th>
-                <th style="background-color:dodgerblue;">Location</th>
-                <th style="background-color:dodgerblue;">Req Date</th>
-                <th style="background-color:dodgerblue;">Type</th>
-                <th style="background-color:dodgerblue;">Topic</th>
-                <th style="background-color:dodgerblue;">AM Name</th>
-                <th style="background-color:dodgerblue;">Engineer</th>
-                <th style="background-color:dodgerblue;">Finished Date</th>
-                <th style="background-color:dodgerblue;">Status</th>
-                </tr>
-               </thead>  
-               <tbody>  
-                 <% 
-                     If cls.ds.Tables("JobAMRequest").Rows.Count > 0 Then
-                         Dim VALUE As String = ""
-                         For i As Integer = 0 To cls.ds.Tables("JobAMRequest").Rows.Count - 1
-                             With cls.ds.Tables("JobAMRequest").Rows(i)
-
-                                 VALUE &=
-                                   "<tr>" &
-                                   "<td>" & i + 1.ToString() & "</td>" &
-                                   "<td>" & .Item("uid").ToString & "</td>" &
-                                   "<td>" & .Item("staff_name").ToString & "</td>" &
-                                   "<td>" & .Item("req_installlocation").ToString & "</td>" &
-                                   "<td>" & .Item("req_date").ToString & "</td>" &
+                                   "<td>" & .Item("req_installdate").ToString & "</td>" &
                                    "<td>" & .Item("req_jobtype1").ToString & "</td>" &
                                    "<td>" & .Item("req_job1").ToString & "</td>" &
                                    "<td>" & .Item("req_amname").ToString & "</td>" &
