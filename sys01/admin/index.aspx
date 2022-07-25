@@ -497,7 +497,7 @@
                             </div>
                         </div><!--<div class="ui-grid-a ui-responsive">-->
 
-                       <div class="ui-grid-a ui-responsive background1" style="margin-top:16px;">
+                     <div class="ui-grid-a ui-responsive background1" style="margin-top:16px;">
 
                             <div class="ui-block-a" style="margin-top:16px; text-align:center;">
                                 <input type="checkbox" style="text-align:center;" id="req_isfinish" name="req_isfinish" value="true"/>

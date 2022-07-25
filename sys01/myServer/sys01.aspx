@@ -245,6 +245,9 @@
                                     ", CASE WHEN req_status = 'new' then 0 else (case when req_status ='plan' then 1 else (case when req_status = 'assigned' then 2 else (case when req_status = 'start' then 3 else 4 end) end)  end)  end as FOR_SORT " &
                                     ", (select count(UID) from SYS04_TS_CSIRESULT where C_REFERENCE = SYS01_TS_REQUEST.UID) as IS_CSI_DONE " &
                                     ", req_bm_approve " &
+                                    ", req_group " &
+                                    ", req_remark " &
+                                    ", req_isfinish " &
                                  "FROM SYS01_TS_REQUEST " &
                                  "WHERE (1=1) " & conditions &
                                  "ORDER BY FOR_SORT, UID ASC" 'req_installdate DESC"  [new,assigned,plan,start,finish,complete]
@@ -254,13 +257,13 @@
                     Dim RESPONSES As String = ""
                     For i As Integer = 0 To clsSQL.ds.Tables("REQUEST").Rows.Count - 1
                         With clsSQL.ds.Tables("REQUEST").Rows(i)
-                            For j = 0 To 74
+                            For j = 0 To 77
                                 Response.Write(.Item(j).ToString.Replace("|", "'").Replace("^", """") & "|")
                             Next
                             If i = clsSQL.ds.Tables("REQUEST").Rows.Count - 1 Then
-                                Response.Write(.Item(75).ToString.Replace("|", "'").Replace("^", """"))
+                                Response.Write(.Item(78).ToString.Replace("|", "'").Replace("^", """"))
                             Else
-                                Response.Write(.Item(75).ToString.Replace("|", "'").Replace("^", """") & "^")
+                                Response.Write(.Item(78).ToString.Replace("|", "'").Replace("^", """") & "^")
                             End If
                         End With
                     Next
@@ -1232,7 +1235,7 @@
                 End If
 
                 If ctrl_txt_remark.Length > 4 Then
-                    SQL_EDITS &= " , txt_remark = '" & ctrl_txt_remark & "' "
+                    SQL_EDITS &= " , req_remark = '" & ctrl_txt_remark & "' "
                 End If
 
 

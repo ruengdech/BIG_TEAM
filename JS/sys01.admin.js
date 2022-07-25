@@ -1,4 +1,4 @@
-﻿ 
+﻿
 var serverAJAXpath = "../myServer/sys01.aspx"; //123
 /*<Control variable> */
 var ctrl_txt_id = $("#txt_id");
@@ -143,21 +143,21 @@ $(document).ready(function () {
         ctrl_sel_staff4.selectmenu('refresh', true);
     });
 
-    try { ctrl_sel_am.selectmenu().selectmenu('refresh', true);} catch (err) { }
+    try { ctrl_sel_am.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_bm.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_staff1.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_staff2.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_staff3.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_staff4.selectmenu().selectmenu('refresh', true); } catch (err) { }
-   
-    
-    
+
+
+
     get_request("ALL");
 
     get_request("WAITFORASSIGN");
 
-    get_request("WAITFORAPPROVE");   
-      
+    get_request("WAITFORAPPROVE");
+
 });
 
 /*</Initial Load>*/
@@ -193,7 +193,7 @@ ctrl_txt_assignid.keyup(function () {
         $.post(serverAJAXpath, { feature: "getStaffByID", id: thisval }).done(function (data) {
             if (data.indexOf("SUCCESS") !== -1) {
                 var TMP = data.split("|");
-                ctrl_txt_assignname.val(TMP[2] + " " + TMP[3]) ;
+                ctrl_txt_assignname.val(TMP[2] + " " + TMP[3]);
             } else {
                 ctrl_txt_assignname.val("");
             }
@@ -282,14 +282,14 @@ ctrl_bt_submit.click(function () {
                 alert("เกิดข้อผิดพลาดในระบบ");
             }
         });
-    }       
+    }
 });
 
 
 ctrl_bt_delete.click(function () {
-    var is_cf  = confirm("ท่านต้องการยืนยันลบรายการใช่หรือไม่");
+    var is_cf = confirm("ท่านต้องการยืนยันลบรายการใช่หรือไม่");
     if (is_cf) {
-    /*Start Submit Delete*/
+        /*Start Submit Delete*/
         $.post(serverAJAXpath, {
             feature: "adminDeleteJOB"
             , job_id: ctrl_txt_id.val()
@@ -304,7 +304,7 @@ ctrl_bt_delete.click(function () {
                 alert("เกิดข้อผิดพลาดในระบบ");
             }
         });
-    /*End Submit Delete*/
+        /*End Submit Delete*/
     }
 
 
@@ -394,7 +394,7 @@ function f_validateCreate(stage) {
             alert("กรุณาระบุประเภทของงาน");
             return false;
         }
-    } 
+    }
 
     return true;
 }
@@ -406,6 +406,7 @@ function prepareDetail(uid, TYPE) {
             row = i;
         }
     }
+    //    console.log(JOB_DATA[row]);
 
 
     var MSG = "<style> table { font-family: arial, sans-serif; border-collapse: collapse; width: 100%; } td, th { border: 1px solid #dddddd; text-align: left; padding: 8px; } tr:nth-child(even) { background-color: #dddddd; } </style> ";
@@ -416,7 +417,7 @@ function prepareDetail(uid, TYPE) {
     MSG = MSG + "<center><H3>พนักงานร้องขอรับบริการงานช่างดังนี้</H3>";
     MSG = MSG + "<table width = '450px'>";
     MSG = MSG + pre_ + "ห้วข้องาน : " + mid_ + JOB_DATA[row][25] + post_;
-    MSG = MSG + pre2_ + "สถานที่ : " + mid_ + JOB_DATA[row][13] + ": " + JOB_DATA[row][14]  + post_;
+    MSG = MSG + pre2_ + "สถานที่ : " + mid_ + JOB_DATA[row][13] + ": " + JOB_DATA[row][14] + post_;
     MSG = MSG + pre_ + "แจ้งโดย : " + mid_ + JOB_DATA[row][3] + " " + JOB_DATA[row][4] + post_;
     MSG = MSG + pre2_ + "Email : " + mid_ + JOB_DATA[row][6] + " <b>Tel</b> " + JOB_DATA[row][5] + post_;
     MSG = MSG + pre_ + "วันที่แจ้ง [ปี-เดือน-วัน] : " + mid_ + JOB_DATA[row][48] + post_;
@@ -439,7 +440,7 @@ function prepareDetail(uid, TYPE) {
     MSG = MSG + pre2_ + "วันที่คาดว่าจะดำเนินการ [ปี-เดือน-วัน] : " + mid_ + JOB_DATA[row][57] + " - " + JOB_DATA[row][58] + post_;
     MSG = MSG + pre_ + "วันที่ดำเนินการจริง [ปี-เดือน-วัน]: " + mid_ + JOB_DATA[row][41] + " - " + JOB_DATA[row][42] + post_;
     MSG = MSG + pre2_ + "รายเอียด : " + mid_ + JOB_DATA[row][71] + post_;
-    MSG = MSG + pre_ + "ผู้ได้รับมอบหมายงาน : " + mid_ + "1. " + JOB_DATA[row][37] ;
+    MSG = MSG + pre_ + "ผู้ได้รับมอบหมายงาน : " + mid_ + "1. " + JOB_DATA[row][37];
     if (JOB_DATA[row][38].length > 3) { MSG = MSG + "<br />2.  " + JOB_DATA[row][38]; }
     if (JOB_DATA[row][39].length > 3) { MSG = MSG + "<br />3.  " + JOB_DATA[row][39]; }
     if (JOB_DATA[row][40].length > 3) { MSG = MSG + "<br />4.  " + JOB_DATA[row][40]; }
@@ -463,7 +464,7 @@ function prepareDetail(uid, TYPE) {
         MSG = MSG + "<span class=\"fa fa-star\" ></span>";
         MSG = MSG + post_;
         MSG = MSG + "<tr><th><b>Comment</b></th><td>" + JOB_DATA[row][67] + "</td></tr>";
-    } else if(JOB_DATA[row][65] === "2") {
+    } else if (JOB_DATA[row][65] === "2") {
         MSG = MSG + pre2_ + "คะแนนความพอใจ : " + mid_;
         MSG = MSG + "<span class=\"fa fa-star fa-star-active\" ></span>";
         MSG = MSG + "<span class=\"fa fa-star fa-star-active\" ></span>";
@@ -499,7 +500,7 @@ function prepareDetail(uid, TYPE) {
         MSG = MSG + "<span class=\"fa fa-star fa-star-active\" ></span>";
         MSG = MSG + post_;
         MSG = MSG + "<tr><th><b>Comment</b></th><td>" + JOB_DATA[row][67] + "</td></tr>";
-    } else if (JOB_DATA[row][65] === "-1" && JOB_DATA[row][42].length > 4 ) {
+    } else if (JOB_DATA[row][65] === "-1" && JOB_DATA[row][42].length > 4) {
         MSG = MSG + pre2_ + "ประเมินความพอใจ : " + mid_;
         MSG = MSG + "<span onclick =\"rate_job(" + JOB_DATA[row][0] + "," + i + ",1);\" class=\"fa fa-star\" ></span>";
         MSG = MSG + "<span onclick =\"rate_job(" + JOB_DATA[row][0] + "," + i + ",2);\" class=\"fa fa-star\" ></span>";
@@ -507,13 +508,13 @@ function prepareDetail(uid, TYPE) {
         MSG = MSG + "<span onclick =\"rate_job(" + JOB_DATA[row][0] + "," + i + ",4);\" class=\"fa fa-star\" ></span>";
         MSG = MSG + "<span onclick =\"rate_job(" + JOB_DATA[row][0] + "," + i + ",5);\" class=\"fa fa-star\" ></span>";
         MSG = MSG + post_;
-    } 
-    
+    }
+
     //MSG = MSG + "<tr><th colspan='2'> คลิกเพื่อดูรายละเอียด</a></th></tr>";
     MSG = MSG + "</table></center></body></html>";
     $("#div_detail").html(MSG);
 
-/*BIND DATA FOR CONTROL*/
+    /*BIND DATA FOR CONTROL*/
 
     ctrl_txt_id.val(uid);
     ctrl_txt_staffId.val(JOB_DATA[row][2]);
@@ -566,7 +567,7 @@ function prepareDetail(uid, TYPE) {
     ctrl_txt_plan_comment.val(JOB_DATA[row][64]);
     ctrl_txt_plan_approveid.val("");
     ctrl_txt_plan_approvename.val(JOB_DATA[row][62]);
-    
+
     //ข้อมูลปฏิบัติงานจริง
     ctrl_txt_date_start.val(JOB_DATA[row][41]);
     ctrl_txt_date_end.val(JOB_DATA[row][42]);
@@ -578,6 +579,10 @@ function prepareDetail(uid, TYPE) {
     //$("#txt_date_start").hide();
     //$("#txt_date_end").hide();
     //$("#p_assigned_attached").hide();
+    //    console.log(JOB_DATA[row][76])
+    if (JOB_DATA[row][76] == "00") {
+        $("#div_isfinish").hide();
+    }
 
     if (JOB_DATA[row][47] == "new") {
         $("#div_plan").hide();
@@ -605,9 +610,9 @@ function prepareDetail(uid, TYPE) {
     }
 
     // Load EVENT for SEL
-    
 
-    try { ctrl_sel_am.selectmenu().selectmenu('refresh', true); } catch(err) { }
+
+    try { ctrl_sel_am.selectmenu().selectmenu('refresh', true); } catch (err) { }
     try { ctrl_sel_bm.selectmenu('refresh', true); } catch (err) { }
 
     try { ctrl_sel_pm.selectmenu('refresh', true); } catch (err) { }
@@ -623,7 +628,7 @@ function prepareDetail(uid, TYPE) {
     try { ctrl_sel_staff4.selectmenu('refresh', true); } catch (err) { }
 
     try { ctrl_sel_plan_result.selectmenu('refresh', true); } catch (err) { }
-    
+
 }
 
 
@@ -658,8 +663,8 @@ function REFRESH_DATA() {
                 $('#tb_history tr:last').after(STR_);
                 JOB_DATA.push(TMP2);
             }
-            /*END BIND ADD REQEST DATA*/     
-        }   
+            /*END BIND ADD REQEST DATA*/
+        }
     });
 }
 
@@ -695,7 +700,7 @@ function get_request(TYPE) {
                     STR_ = STR_ + "<td><strong>" + TMP2[13] + "</strong><br />" + TMP2[14] + "</td>";
                     STR_ = STR_ + "<td>AM: " + TMP2[8] + "<br />BM: " + TMP2[11] + "</td>";
                     STR_ = STR_ + "<td>" + engineers + "</td>";
-                    
+
                     if (TMP2[47] == "assigned" || TMP2[47] == "start" || TMP2[47] == "plan") {
                         STR_ = STR_ + "<td><center>" + TMP2[47] + "<br /><a href='#page_edit' data-transition='slidefade' onclick=\"setTimeout(prepareDetail(" + TMP2[0] + ",'ASSIGN'),1000);\" >แก้ไขช่าง</a></center></td>";
                     } else {
